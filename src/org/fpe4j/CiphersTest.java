@@ -127,7 +127,7 @@ public class CiphersTest {
 					(byte) 0x94, 123, 59, (byte) 0x93, (byte) 0xDB, 99 };
 			assertArrayEquals(R, c.prf(K, Common.concatenate(P, Q)));
 		} catch (InvalidKeyException e) {
-			fail();
+			fail(e.toString());
 		}
 	}
 
@@ -211,7 +211,7 @@ public class CiphersTest {
 					(byte) 0x94, 123, 59, (byte) 0x93, (byte) 0xDB, 99 };
 			assertArrayEquals(R, c.prf2(K, Common.concatenate(P, Q)));
 		} catch (InvalidKeyException e) {
-			fail();
+			fail(e.toString());
 		}
 	}
 
@@ -302,7 +302,7 @@ public class CiphersTest {
 					(byte) 0xD4 };
 			assertArrayEquals(Y, c.ciph(K, X));
 		} catch (InvalidKeyException e) {
-			fail();
+			fail(e.toString());
 		}
 	}
 }

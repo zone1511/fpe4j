@@ -19,7 +19,12 @@
 /**
  * This package implements the two methods for format-preserving encryption
  * specified in NIST Special Publication 800-38G, Recommendation for Block
- * Cipher Modes of Operation: Methods for Format-Preserving Encryption.
+ * Cipher Modes of Operation: Methods for Format-Preserving Encryption, as well
+ * as the FFX mechanism and A2 and A10 parameter sets for format-preserving
+ * encryption described in <a href=
+ * "http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.304.1736&rep=rep1&type=pdf">The
+ * FFX Mode of Operation for Format-Preserving Encryption</a>, by Mihir Bellare,
+ * Phillip Rogaway, and Terence Spies.
  * 
  * <p>
  * The implementations focus on conformance, rather than on security or
@@ -27,9 +32,9 @@
  * sensitive data.
  * 
  * <p>
- * Both methods FF1 and FF3 are implemented in individual classes. (Note that
- * the FF2 method was not selected for the March 2016 publication of NIST SP
- * 800-38G.)
+ * Both methods FF1 and FF3 are implemented in standalone classes as well as in
+ * FFX parameter sets. (Note that the FF2 method was not selected for the March
+ * 2016 publication of NIST SP 800-38G.)
  * 
  * <p>
  * Common block cipher modes of encryption, such as AES, take fixed-length
@@ -55,7 +60,7 @@
  * would allow a card payment processor to encrypt PANs yet retain the same
  * format and structure in the ciphertext as in the plaintext.
  * 
- * <h1>Usage</h1>
+ * <h1>Standalone FF1 and FF3 Usage</h1>
  * 
  * <p>
  * The FF1 and FF3 methods operate on several parameters:
@@ -76,6 +81,34 @@
  * Both FF1 and FF3 output arrays of integer symbols, with length equal to the
  * input length, and with each symbol in the range [0..radix-1].
  * 
+ * <h1>FFX and FFXParameter Usage</h1>
+ * 
+ * <p>
+ * The generic FFX method takes a set of parameters as input and uses those
+ * parameters to implement a specific format-preserving encryption algorithm. To
+ * use FFX, the caller must implement a complete set of parameters to define a
+ * specific algorithm, notably a round function for transformations in the
+ * Feistel rounds.
+ * 
+ * <p>
+ * An FFX instance may be instantiated by supplying individual parameters, which
+ * follows the FFX specification, or by supplying an FFXParameters object, which
+ * provides the additional flexibility necessary to implement FF3 or other FFX
+ * variations with custom arithmetic functions.
+ * 
+ * <p>
+ * This implementation includes FFX parameter sets for the FF1 and FF3
+ * algorithms, as well as for the A2 and A10 algorithms defined by Bellare,
+ * Rogaway, and Spies.
+ * 
+ * <p>
+ * The A2 algorithm operates on arrays of 8 to 128 boolean values, implemented
+ * as arrays of integers with a radix of 2. The A10 algorithm operates on arrays
+ * of 4 to 36 decimal values, implemented as arrays of integers with a radix of
+ * 10. Both A2 and A10 accept tweak arrays of arbitrary length.
+ * 
+ * <h1>Usage notes for all algorithms</h1>
+ * 
  * <p>
  * It is up to the caller to convert between arbitrary data formats, e.g.
  * character-based data, and the arrays of integers that the FF1 and FF3
@@ -85,35 +118,41 @@
  * [0..29], and reverse the conversion using the output.
  * 
  * <p>
- * The FF1 and FF3 methods operate only on uniform arrays of symbols where each
- * symbol is in the same range. They do not preserve data formats where the set
- * of symbols varies depending on the position within the input, such as for
- * example a license plate number of one decimal digit followed by three upper
- * case letters followed by three decimal digits. If necessary, the caller may
- * transform such input into uniform symbols, then reverse the transformation to
- * restore the original formatting.
+ * All these methods of format-preserving encryption operate on uniform arrays
+ * of symbols where each symbol is in the same range. They do not preserve data
+ * formats where the set of symbols varies depending on the position within the
+ * input, such as a license plate number of one decimal digit followed by three
+ * upper case letters followed by three decimal digits. If necessary, the caller
+ * may transform such input into uniform symbols, then reverse the
+ * transformation to restore the original formatting.
  * 
  * <h1>Notes on the Implementation</h1>
  *
  * <p>
- * The code generally follows NIST SP 800-38G as literally as possible, with
- * concessions where needed to represent the concepts in Java. In general, we
- * forego optimizations in favor of a closer match between the code and NIST SP
- * 800-38G. We do, however, make some concessions to readability where a direct
- * interpretation of NIST SP 800-38G would produce verbose code that would be
- * hard to read.
+ * The standalone FF1 and FF3 implementations follow NIST SP 800-38G as
+ * literally as possible, with concessions where needed to represent the
+ * concepts in Java. In general, we forego optimizations in favor of a closer
+ * match between the code and NIST SP 800-38G. We do, however, make some
+ * concessions to readability where a direct interpretation of NIST SP 800-38G
+ * would produce verbose code that would be hard to read.
  * 
  * <p>
- * To ensure compliance with NIST SP 800-38G, we validate all inputs as
- * specified, and throw exceptions as appropriate for invalid input.
+ * Likewise, the FFX implementation and A2 and A10 parameter sets follow
+ * Bellare, Rogaway, and Spies as closely as possible, with concessions where
+ * needed in the implementation in Java and for readability, but without
+ * optimizations.
+ * 
+ * <p>
+ * To ensure compliance with the original specifications, we validate all inputs
+ * as specified, and throw exceptions as appropriate for invalid input.
  * 
  * <h1>Naming</h1>
  *
  * <p>
- * This implementation focuses on conformance with the algorithms defined in
- * NIST SP 800-38G, with naming and structure closely aligned to the definitions
- * in NIST SP 800-38G. As such, variable names in the code defy Java naming
- * conventions in favor of the naming conventions used in NIST SP 800-38G.
+ * This implementation focuses on conformance with the algorithms defined in the
+ * specifications, with naming and structure closely aligned to the definitions
+ * in the specifications. As such, variable names in the code defy Java naming
+ * conventions in favor of the naming conventions used in the specifications.
  * 
  * <p>
  * So, for example, we use "x" to represent an integer and "X" to represent an
@@ -127,13 +166,13 @@
  * in NIST SP 800-38G becomes "prf(X)" in the implementation.
  * 
  * <p>
- * NIST SP 800-38G uses mathematical symbols for some of its notations, which
- * require alternative naming in Java. In the implementation, these are replaced
- * with descriptive method names. So, for example, the notation
+ * The specifications use mathematical symbols for some of their notations,
+ * which require alternative naming in Java. In the implementation, these are
+ * replaced with descriptive method names. So, for example, the notation
  * "&lfloor;x&rfloor;" becomes "floor(x)" in the implementation.
  * 
  * <p>
- * In some places, NIST SP 800-38G uses superscripts and subscripts to specify
+ * In some places, the specifications use superscripts and subscripts to specify
  * additional parameters. So, for example, "STR<sup>m</sup><sub>radix</sub>(x)"
  * becomes "str(x,radix,m)" in the implementation.
  * 

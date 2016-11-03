@@ -48,8 +48,7 @@ public class FF1Test {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.FF1#encrypt(SecretKey, byte[], int[])}.
+	 * Test method for {@link org.fpe4j.FF1#encrypt(SecretKey, byte[], int[])}.
 	 * 
 	 * @throws InvalidKeyException
 	 *             Only if there's a programming error in the test case.
@@ -162,8 +161,7 @@ public class FF1Test {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.FF1#decrypt(SecretKey, byte[], int[])}.
+	 * Test method for {@link org.fpe4j.FF1#decrypt(SecretKey, byte[], int[])}.
 	 * 
 	 * @throws InvalidKeyException
 	 *             Only if there's a programming error in the test case.

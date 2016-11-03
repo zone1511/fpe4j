@@ -267,11 +267,18 @@ public class CommonTest {
 
 		// X is too large
 		try {
-			Common.str(BigInteger.valueOf(10).pow(4), 10, 4);
+			int[] X = { 0, 0, 0, 0 };
+			assertArrayEquals(X, Common.str(BigInteger.valueOf(10).pow(4), 10, 4));
 			fail();
+
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
+			// fail();
 		}
+		/*
+		 * Note that this test case is modified to accommodate the FFX
+		 * algorithms.
+		 */
 
 		// byte value
 		int[] X2 = { 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -577,8 +584,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#mod(BigInteger, BigInteger)}.
+	 * Test method for {@link org.fpe4j.Common#mod(BigInteger, BigInteger)}.
 	 */
 	@Test
 	public void testModBigIntegerBigInteger() {
@@ -620,8 +626,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#bytestring(int, int)}.
+	 * Test method for {@link org.fpe4j.Common#bytestring(int, int)}.
 	 */
 	@Test
 	public void testBytestringIntInt() {
@@ -631,7 +636,7 @@ public class CommonTest {
 
 		// s too small
 		try {
-			Common.bytestring(1, 0);
+			Common.bytestring(1, -1);
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
@@ -650,9 +655,13 @@ public class CommonTest {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
 
+		// zero byte value
+		byte[] expected2 = { };
+		assertArrayEquals(expected2, Common.bytestring(0, 0));
+
 		// one byte value
-		byte[] expected2 = { (byte) 0xFF };
-		assertArrayEquals(expected2, Common.bytestring(255, 1));
+		byte[] expected3 = { (byte) 0xFF };
+		assertArrayEquals(expected3, Common.bytestring(255, 1));
 
 		// overflow one byte
 		try {
@@ -690,8 +699,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#bytestring(BigInteger, int)}.
+	 * Test method for {@link org.fpe4j.Common#bytestring(BigInteger, int)}.
 	 */
 	@Test
 	public void testBytestringBigIntegerInt() {
@@ -753,8 +761,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#bitstring(boolean, int)}.
+	 * Test method for {@link org.fpe4j.Common#bitstring(boolean, int)}.
 	 */
 	@Test
 	public void testBitstring() {
@@ -792,8 +799,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#concatenate(int[], int[])}.
+	 * Test method for {@link org.fpe4j.Common#concatenate(int[], int[])}.
 	 */
 	@Test
 	public void testConcatenateIntArrayIntArray() {
@@ -829,8 +835,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#concatenate(byte[], byte[])}.
+	 * Test method for {@link org.fpe4j.Common#concatenate(byte[], byte[])}.
 	 */
 	@Test
 	public void testConcatenateByteArrayByteArray() {
@@ -866,8 +871,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#intArrayToString(int[])}.
+	 * Test method for {@link org.fpe4j.Common#intArrayToString(int[])}.
 	 */
 	@Test
 	public void testIntArrayToString() {
@@ -930,8 +934,7 @@ public class CommonTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#byteArrayToHexString(byte[])}.
+	 * Test method for {@link org.fpe4j.Common#byteArrayToHexString(byte[])}.
 	 */
 	@Test
 	public void testByteArrayToHexString() {
@@ -961,5 +964,84 @@ public class CommonTest {
 		// range of values
 		byte[] X4 = { (byte) 0x00, (byte) 0x7F, (byte) 0x80, (byte) 0xFF };
 		assertEquals("007F80FF", Common.byteArrayToHexString(X4));
+	}
+
+	/**
+	 * Test method for {@link org.fpe4j.Common#hexStringToByteArray(String)}.
+	 */
+	@Test
+	public void testHexStringToByteArray() {
+		// null input
+		try {
+			Common.hexStringToByteArray(null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof NullPointerException);
+		}
+
+		// empty input
+		byte[] expected1 = {};
+		assertArrayEquals(expected1, Common.hexStringToByteArray(""));
+
+		// odd length
+		try {
+			Common.hexStringToByteArray("AAB");
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+		}
+
+		// invalid character
+		try {
+			Common.hexStringToByteArray("ABCDEFGH");
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+		}
+
+		// range of values
+		for (int i = 0; i < 16; i++) {
+			byte[] b = { (byte) (i * 16), (byte) (i * 16 + 1), (byte) (i * 16 + 2), (byte) (i * 16 + 3),
+					(byte) (i * 16 + 4), (byte) (i * 16 + 5), (byte) (i * 16 + 6), (byte) (i * 16 + 7),
+					(byte) (i * 16 + 8), (byte) (i * 16 + 9), (byte) (i * 16 + 10), (byte) (i * 16 + 11),
+					(byte) (i * 16 + 12), (byte) (i * 16 + 13), (byte) (i * 16 + 14), (byte) (i * 16 + 15) };
+			String s = Common.byteArrayToHexString(b);
+			assertArrayEquals(b, Common.hexStringToByteArray(s));
+		}
+	}
+
+	/**
+	 * Test method for {@link org.fpe4j.Common#intStringToIntArray(String)}
+	 */
+	@Test
+	public void testIntStringToIntArray() {
+		// null input
+		try {
+			Common.intStringToIntArray(null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof NullPointerException);
+		}
+
+		// empty input
+		int[] expected1 = {};
+		assertArrayEquals(expected1, Common.intStringToIntArray(""));
+
+		// leading non-numeric characters
+		int[] expected2 = { 10, 11 };
+		assertArrayEquals(expected2, Common.intStringToIntArray(" 10 11"));
+
+		// trailing non-numeric characters
+		int[] expected3 = { 12, 13 };
+		assertArrayEquals(expected3, Common.intStringToIntArray("12 13 "));
+
+		// no numeric characters
+		int[] expected4 = {};
+		assertArrayEquals(expected4, Common.intStringToIntArray("asdfjkl;"));
+
+		// range of values
+		int[] expected5 = { 0, 1, Integer.MAX_VALUE, Integer.MIN_VALUE, -1 };
+		assertArrayEquals(expected5, Common.intStringToIntArray("0, 1, 2147483647, -2147483648, -1"));
+
 	}
 }

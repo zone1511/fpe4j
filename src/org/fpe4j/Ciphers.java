@@ -55,8 +55,7 @@ public class Ciphers {
 			mAesEcbCipher = Cipher.getInstance("AES/ECB/NoPadding");
 			mAesCbcCipher = Cipher.getInstance("AES/CBC/NoPadding");
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-			// this would be a programming error so convert to an unchecked
-			// exception
+			// this could happen if the JRE doesn't have the ciphers
 			throw new RuntimeException(e);
 		}
 	}

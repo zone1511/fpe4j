@@ -179,73 +179,86 @@ public class FF3 {
 		// 1. Let u = ceiling(n/2); v = n – u.
 		int u = ceiling(n / 2.0);
 		int v = n - u;
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println("Step 1\n\tu is <" + u + ">, and v is <" + v + ">");
+		}
 
 		// 2. Let A = X[1..u]; B = X[u + 1..n].
 		int[] A = Arrays.copyOfRange(X, 0, u);
 		int[] B = Arrays.copyOfRange(X, u, n);
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println("Step 2\n\tA is " + intArrayToString(A) + "\n\tB is " + intArrayToString(B));
+		}
 
 		// 3. Let T_L = T[0..31] and T_R = T[32..63]
 		byte[] T_L = Arrays.copyOfRange(T, 0, 4);
 		byte[] T_R = Arrays.copyOfRange(T, 4, 8);
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println(
 					"Step 3\n\tT_L is " + byteArrayToHexString(T_L) + "\n\tT_R is " + byteArrayToHexString(T_R) + "\n");
+		}
 
 		// 4. For i from 0 to 7:
 		for (int i = 0; i < 8; i++) {
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("Round #" + i);
+			}
 
 			// i. If i is even, let m = u and W = T_R ,
 			// else let m = v and W = T_L .
 			int m = i % 2 == 0 ? u : v;
 			byte[] W = i % 2 == 0 ? T_R : T_L;
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.i\n\t\tm is <" + m + ">\n\t\tW is " + byteArrayToHexString(W));
+			}
 
 			// ii. Let P = W xor [i] 4 || [NUMradix (REV(B))] 12 .
 			byte[] P = concatenate(xor(W, bytestring(i, 4)), bytestring(num(rev(B), radix), 12));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.ii\n\t\tP is " + unsignedByteArrayToString(P));
+			}
 
 			// iii Let S = REVB(CIPH REVB(K) REVB(P)).
 			byte[] S = revb(mCiphers.ciph(revK, revb(P)));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.iii\n\t\tS is " + byteArrayToHexString(S));
+			}
 
 			// iv. Let y = NUM(S).
 			BigInteger y = num(S);
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.iv\n\t\ty is " + y);
+			}
 
 			// v. Let c = (NUMradix (REV(A)) + y) mod radix m .
 			BigInteger c = mod(num(rev(A), radix).add(y), BigInteger.valueOf(radix).pow(m));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.v\n\t\tc is " + c);
+			}
 
 			// vi. Let C = REV(STR m radix (c)).
 			int[] C = rev(str(c, radix, m));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.vi\n\t\tC is " + intArrayToString(C));
+			}
 
 			// vii. Let A = B.
 			A = B;
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.vii\n\t\tA is " + intArrayToString(A));
+			}
 
 			// viii. Let B = C.
 			B = C;
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.viii\n\t\tB is " + intArrayToString(B));
+			}
 		}
 		// 5. Return A || B.
 		int[] AB = concatenate(A, B);
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println("Step 5\n\tA || B is " + intArrayToString(AB));
+		}
 		return AB;
 	}
 
@@ -322,73 +335,86 @@ public class FF3 {
 		// 1. Let u = ceiling(n/2); v = n – u.
 		int u = ceiling(n / 2.0);
 		int v = n - u;
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println("Step 1\n\tu is <" + u + ">, and v is <" + v + ">");
+		}
 
 		// 2. Let A = X[1..u]; B = X[u + 1..n].
 		int[] A = Arrays.copyOfRange(X, 0, u);
 		int[] B = Arrays.copyOfRange(X, u, n);
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println("Step 2\n\tA is " + intArrayToString(A) + "\n\tB is " + intArrayToString(B));
+		}
 
 		// 3. Let T_L = T[0..31] and T_R = T[32..63]
 		byte[] T_L = Arrays.copyOfRange(T, 0, 4);
 		byte[] T_R = Arrays.copyOfRange(T, 4, 8);
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println(
 					"Step 3\n\tT_L is " + byteArrayToHexString(T_L) + "\n\tT_R is " + byteArrayToHexString(T_R) + "\n");
+		}
 
 		// 4. For i from 7 to 0:
 		for (int i = 7; i >= 0; i--) {
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("Round #" + i);
+			}
 
 			// i. If i is even, let m = u and W = T_R ,
 			// else let m = v and W =T_L .
 			int m = i % 2 == 0 ? u : v;
 			byte[] W = i % 2 == 0 ? T_R : T_L;
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.i\n\t\tm is <" + m + ">\n\t\tW is " + byteArrayToHexString(W));
+			}
 
 			// ii. Let P = W xor [i]^4 || [NUMradix (REV(A))]^12 .
 			byte[] P = concatenate(xor(W, bytestring(i, 4)), bytestring(num(rev(A), radix), 12));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.ii\n\t\tP is " + unsignedByteArrayToString(P));
+			}
 
 			// iii Let S = REVB(CIPH REVB(K) REVB(P)).
 			byte[] S = revb(mCiphers.ciph(revK, revb(P)));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.iii\n\t\tS is " + byteArrayToHexString(S));
+			}
 
 			// iv. Let y = NUM(S).
 			BigInteger y = num(S);
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.iv\n\t\ty is " + y);
+			}
 
 			// v. Let c = (NUMradix (REV(B))–y) mod radix m .
 			BigInteger c = mod(num(rev(B), radix).subtract(y), BigInteger.valueOf(radix).pow(m));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.v\n\t\tc is " + c);
+			}
 
 			// vi. Let C = REV(STR m radix (c)).
 			int[] C = rev(str(c, radix, m));
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.vi\n\t\tC is " + intArrayToString(C));
+			}
 
 			// vii. Let B = A.
 			B = A;
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.vii\n\t\tB is " + intArrayToString(B));
+			}
 
 			// viii. Let A = C.
 			A = C;
-			if (Constants.CONFORMANCE_OUTPUT)
+			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.viii\n\t\tA is " + intArrayToString(A));
+			}
 		}
 		// 5. Return A || B.
 		int[] AB = concatenate(A, B);
-		if (Constants.CONFORMANCE_OUTPUT)
+		if (Constants.CONFORMANCE_OUTPUT) {
 			System.out.println("Step 5\n\tA || B is " + intArrayToString(AB));
+		}
 		return AB;
 	}
 }

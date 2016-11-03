@@ -34,7 +34,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.junit.Test;
 
 /**
- * JUnit test cases for the FF3 class
+ * JUnit test cases for the FF3 class.
  * 
  * @author Kai Johnson
  *
@@ -92,8 +92,7 @@ public class FF3Test {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.FF3#encrypt(SecretKey, byte[], int[])}.
+	 * Test method for {@link org.fpe4j.FF3#encrypt(SecretKey, byte[], int[])}.
 	 * 
 	 * @throws InvalidKeyException
 	 *             Only if there's a programming error in the test case.
@@ -227,8 +226,7 @@ public class FF3Test {
 	}
 
 	/**
-	 * Test method for
-	 * {@link org.fpe4j.FF3#decrypt(SecretKey, byte[], int[])}.
+	 * Test method for {@link org.fpe4j.FF3#decrypt(SecretKey, byte[], int[])}.
 	 * 
 	 * @throws InvalidKeyException
 	 *             Only if there's a programming error in the test case.
@@ -365,8 +363,8 @@ public class FF3Test {
 	 * 
 	 * This test exercises the encrypt and decrypt methods with radix values
 	 * from {@value org.fpe4j.Constants#MINRADIX} to
-	 * {@value org.fpe4j.Constants#MAXRADIX} with each of the
-	 * permitted input lengths and key sizes.
+	 * {@value org.fpe4j.Constants#MAXRADIX} with each of the permitted input
+	 * lengths and key sizes.
 	 * 
 	 * @throws InvalidKeyException
 	 *             Only if there's a programming error in the test case.

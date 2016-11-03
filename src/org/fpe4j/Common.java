@@ -60,11 +60,10 @@ public class Common {
 	 *             If X is null.
 	 * @throws IllegalArgumentException
 	 *             If X is empty or has more than
-	 *             {@value org.fpe4j.Constants#MAXLEN} elements; if
-	 *             radix is less than
-	 *             {@value org.fpe4j.Constants#MINRADIX} or greater
-	 *             than {@value org.fpe4j.Constants#MAXRADIX}; or if
-	 *             any numeral X[i] is outside the range [0..radix-1].
+	 *             {@value org.fpe4j.Constants#MAXLEN} elements; if radix is
+	 *             less than {@value org.fpe4j.Constants#MINRADIX} or greater
+	 *             than {@value org.fpe4j.Constants#MAXRADIX}; or if any numeral
+	 *             X[i] is outside the range [0..radix-1].
 	 */
 	protected static BigInteger num(int[] X, int radix) {
 		// validate X
@@ -189,8 +188,8 @@ public class Common {
 	 *             If x is null.
 	 * @throws IllegalArgumentException
 	 *             If m is not within the range
-	 *             [1..{@value org.fpe4j.Constants#MAXLEN}]; if
-	 *             radix is not within the range
+	 *             [1..{@value org.fpe4j.Constants#MAXLEN}]; if radix is not
+	 *             within the range
 	 *             [{@value org.fpe4j.Constants#MINRADIX}..{@value org.fpe4j.Constants#MAXRADIX}];
 	 *             or if x is not within the range [0..radix<sup>m</sup>].
 	 */
@@ -213,6 +212,12 @@ public class Common {
 			throw new NullPointerException("x must not be null");
 		if (x.compareTo(BigInteger.ZERO) < 0 || x.compareTo(r.pow(m)) >= 0)
 			throw new IllegalArgumentException("X is not within the permitted range of 0.." + r.pow(m) + ": " + x);
+		/*
+		 * This function has been modified to allow inputs larger than radix^m
+		 * to work with the more general FFX algorithms. Note that the result if
+		 * x > radix^m is as if the input were x mod radix^m instead. That is,
+		 * the most significant digits are truncated to fit the length m.
+		 */
 
 		// allocate result array
 		int[] X = new int[m];
@@ -330,8 +335,8 @@ public class Common {
 	 *             If either X or Y is null.
 	 * @throws IllegalArgumentException
 	 *             if X or Y is empty; if X or Y has more than
-	 *             {@value org.fpe4j.Constants#MAXLEN} elements; or
-	 *             if X.length != Y.length.
+	 *             {@value org.fpe4j.Constants#MAXLEN} elements; or if X.length
+	 *             != Y.length.
 	 */
 	protected static byte[] xor(byte[] X, byte[] Y) {
 		// validate X
@@ -354,8 +359,9 @@ public class Common {
 		byte[] Z = new byte[X.length];
 
 		// xor bytes
-		for (int i = 0; i < X.length; i++)
+		for (int i = 0; i < X.length; i++) {
 			Z[i] = (byte) (X[i] ^ Y[i]);
+		}
 
 		return Z;
 	}
@@ -527,14 +533,14 @@ public class Common {
 	 *         representation of x as a string of s bytes.
 	 * @throws IllegalArgumentException
 	 *             If s is not within the range
-	 *             [1..{@value org.fpe4j.Constants#MAXLEN}]; if x is
-	 *             negative; or if x is greater than 256<sup>s</sup>.
+	 *             [0..{@value org.fpe4j.Constants#MAXLEN}]; if x is negative;
+	 *             or if x is greater than 256<sup>s</sup>.
 	 */
 	protected static byte[] bytestring(int x, int s) {
 		// validate s
-		if (s < 1 || s > Constants.MAXLEN)
+		if (s < 0 || s > Constants.MAXLEN)
 			throw new IllegalArgumentException(
-					"s is not within the permitted range of 1.." + Constants.MAXLEN + ": " + s);
+					"s is not within the permitted range of 0.." + Constants.MAXLEN + ": " + s);
 
 		// validate x
 		if (x < 0)
@@ -570,8 +576,8 @@ public class Common {
 	 *         representation of x as a string of s bytes.
 	 * @throws IllegalArgumentException
 	 *             If s is not within the range
-	 *             [1..{@value org.fpe4j.Constants#MAXLEN}]; if x is
-	 *             negative; or if x is greater than 256<sup>s</sup>.
+	 *             [1..{@value org.fpe4j.Constants#MAXLEN}]; if x is negative;
+	 *             or if x is greater than 256<sup>s</sup>.
 	 */
 	protected static byte[] bytestring(BigInteger x, int s) {
 		// validate s
@@ -712,8 +718,9 @@ public class Common {
 			builder.append(i);
 			builder.append(" ");
 		}
-		if (builder.length() > 0)
+		if (builder.length() > 0) {
 			builder.deleteCharAt(builder.length() - 1);
+		}
 		return builder.toString();
 	}
 
@@ -739,10 +746,11 @@ public class Common {
 			builder.append(b & 0xFF);
 			builder.append(", ");
 		}
-		if (X.length > 0)
+		if (X.length > 0) {
 			builder.replace(builder.length() - 2, builder.length(), " ]");
-		else
+		} else {
 			builder.append("]");
+		}
 		return builder.toString();
 	}
 
@@ -777,14 +785,105 @@ public class Common {
 	 */
 	protected static String byteArrayToHexString(byte[] X) {
 		// validate X
-		if (X == null) {
+		if (X == null)
 			throw new NullPointerException("X must not be null");
-		}
 
 		StringBuilder builder = new StringBuilder(X.length * 2);
 		for (byte b : X) {
 			builder.append(HEX_STRINGS[b & 0xFF]);
 		}
 		return builder.toString();
+	}
+
+	/**
+	 * Converts a string representing a hexadecimal value to an array of bytes.
+	 * 
+	 * @param string
+	 *            the string to convert
+	 * @return an array of bytes
+	 * @throws NullPointerException
+	 *             if string is null
+	 * @throws IllegalArgumentException
+	 *             if the string contains characters that are not valid
+	 *             hexadecimal characters, or if the string does not contain an
+	 *             even number of characters
+	 */
+	protected static byte[] hexStringToByteArray(String string) {
+		// validate string
+		if (string == null)
+			throw new NullPointerException("string must not be null.");
+
+		int length = string.length();
+
+		if (length % 2 != 0)
+			throw new IllegalArgumentException("String must have an even number of characters.");
+
+		// create a new array with one byte for every two characters in the
+		// string
+		byte bytes[] = new byte[length / 2];
+
+		// for each character in the string
+		for (int i = 0; i < length; i++) {
+			int digit = Character.digit(string.charAt(i), 16);
+
+			if (digit < 0)
+				throw new IllegalArgumentException("Invalid character '" + string.charAt(i) + "' at index " + i + ".");
+
+			// if this is an even character
+			if (i % 2 == 0) {
+				// use it for the high nibble
+				bytes[i / 2] += (byte) (digit << 4);
+			} else {
+				// use it for the low nibble
+				bytes[i / 2] += (byte) digit;
+			}
+		}
+		return bytes;
+	}
+
+	/**
+	 * Converts a string of integers separated by non-numeric characters to an
+	 * array of integers.
+	 * 
+	 * @param string
+	 *            the string to convert
+	 * @return an array of integers
+	 * @throws NullPointerException
+	 *             if string is null
+	 */
+	protected static int[] intStringToIntArray(String string) {
+		// validate string
+		if (string == null)
+			throw new NullPointerException("string must not be null.");
+
+		// split the input string into separate numeric strings
+		String strings[] = string.split("[^-0-9]+");
+		/*
+		 * Note that this will produce empty strings at the start of the array
+		 * if there are additional non-numeric characters at the start end of
+		 * the input string.
+		 */
+
+		// return an empty array if there are no numeric characters in the input
+		if (strings.length == 0)
+			return new int[0];
+
+		// skip the first string if it's empty
+		int s = strings[0].compareTo("") == 0 ? 1 : 0;
+
+		// allocate the output array
+		int ints[] = new int[strings.length - s];
+
+		// for each numeric string
+		int i = 0;
+		for (; s < strings.length; s++) {
+			// convert the numeric strings to integers
+			ints[i++] = Integer.valueOf(strings[s]).intValue();
+			/*
+			 * Note that this will throw a RuntimeException if any of the
+			 * strings do not contain numeric values.
+			 */
+		}
+		return ints;
 	}
 }
