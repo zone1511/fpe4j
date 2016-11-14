@@ -214,7 +214,7 @@ public class FFX {
 	 * @author Kai Johnson
 	 *
 	 */
-	protected interface ArithmeticFunction {
+	public interface ArithmeticFunction {
 		/**
 		 * Add Y to X
 		 * 
@@ -500,10 +500,9 @@ public class FFX {
 		if (minlen < Constants.MINLEN)
 			throw new IllegalArgumentException(
 					"minlen must be greater than or equal to " + Constants.MINLEN + ": " + minlen);
-		if (Math.pow(radix, minlen) < 100) {
+		if (Math.pow(radix, minlen) < 100)
 			throw new IllegalArgumentException(
 					"radix^minlen must be greater than or equal to 100: " + Math.pow(radix, minlen));
-		}
 
 		// validate maxlen
 		if (maxlen < minlen)
@@ -577,10 +576,9 @@ public class FFX {
 		// validate minlen
 		if (minlen < 2)
 			throw new IllegalArgumentException("minlen must be greater than or equal to 2: " + minlen);
-		if (Math.pow(radix, minlen) < 100) {
+		if (Math.pow(radix, minlen) < 100)
 			throw new IllegalArgumentException(
 					"radix^minlen must be greater than or equal to 100: " + Math.pow(radix, minlen));
-		}
 
 		// validate maxlen
 		if (maxlen < minlen)

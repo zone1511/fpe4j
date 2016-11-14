@@ -17,7 +17,8 @@
  */
 package org.fpe4j;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.security.InvalidKeyException;
 

@@ -23,7 +23,7 @@ package org.fpe4j;
  * @author Kai Johnson
  *
  */
-public class Constants {
+class Constants {
 	/**
 	 * Determines whether the methods will produce output for conformance
 	 * testing against the NIST sample data.
@@ -31,17 +31,17 @@ public class Constants {
 	 * Modify the source code to set this field to true to enable output of
 	 * intermediate results to the console.
 	 */
-	protected static final boolean CONFORMANCE_OUTPUT = false;
+	static final boolean CONFORMANCE_OUTPUT = false;
 
 	/**
 	 * Minimum length of an input string for the FF1 functions.
 	 */
-	public static final int MINLEN = 2;
+	static final int MINLEN = 2;
 
 	/**
 	 * Maximum length of an input string for the FF1 function.
 	 */
-	public static final int MAXLEN = 4096;
+	static final int MAXLEN = 4096;
 	/*
 	 * NIST SP 800-38G permits MAXLEN to be in the range
 	 * MINLEN+1..2<sup>32</sup>. We limit MAXLEN to 4096 to keep performance
@@ -56,17 +56,17 @@ public class Constants {
 	/**
 	 * Minimum radix for FF1 and FF3.
 	 */
-	public static final int MINRADIX = 2;
+	static final int MINRADIX = 2;
 
 	/**
 	 * Maximum radix for FF1 and FF3.
 	 */
-	public static final int MAXRADIX = 65536;
+	static final int MAXRADIX = 65536;
 
 	/**
 	 * Non-instantiable class.
 	 */
-	protected Constants() {
+	Constants() {
 		throw new RuntimeException("The Constants class cannot be instantiated.");
 	}
 }

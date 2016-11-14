@@ -43,17 +43,17 @@ public class FF1Parameters implements FFXParameters {
 	/**
 	 * The radix specified in this parameter set.
 	 */
-	private final int radix;
+	final int radix;
 
 	/**
 	 * Instances of AES ciphers for PRF and CIPH algorithms.
 	 */
-	private final Ciphers ciphers;
+	final Ciphers ciphers;
 
 	/**
 	 * Split function for FF1.
 	 */
-	private final FFX.SplitFunction ff1Splitter = new FFX.SplitFunction() {
+	final FFX.SplitFunction ff1Splitter = new FFX.SplitFunction() {
 
 		@Override
 		public int split(int n) {
@@ -68,7 +68,7 @@ public class FF1Parameters implements FFXParameters {
 	/**
 	 * Function to determine the number of Feistel rounds for FF1.
 	 */
-	private final FFX.RoundCounter ff1RoundCounter = new FFX.RoundCounter() {
+	final FFX.RoundCounter ff1RoundCounter = new FFX.RoundCounter() {
 
 		@Override
 		public int rnds(int n) {
@@ -79,7 +79,7 @@ public class FF1Parameters implements FFXParameters {
 	/**
 	 * Round function F for FF1, derived from NIST SP 800-38G.
 	 */
-	private final FFX.RoundFunction ff1Round = new FFX.RoundFunction() {
+	final FFX.RoundFunction ff1Round = new FFX.RoundFunction() {
 
 		@Override
 		public boolean validKey(SecretKey K) {
@@ -110,7 +110,7 @@ public class FF1Parameters implements FFXParameters {
 
 			// 2. Let A = X[1..u]; B = X[u + 1..n].
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 2\n\tB is " + intArrayToString(B));
+				System.out.println("Step 2\n\tB is " + Common.intArrayToString(B));
 			}
 
 			// 3. Let b = ceiling(ceiling(v * LOG(radix))/8).
@@ -133,7 +133,7 @@ public class FF1Parameters implements FFXParameters {
 			byte[] P = { (byte) 0x01, (byte) 0x02, (byte) 0x01, tbr[0], tbr[1], tbr[2], (byte) 0x0A,
 					(byte) (mod(u, 256) & 0xFF), fbn[0], fbn[1], fbn[2], fbn[3], fbt[0], fbt[1], fbt[2], fbt[3] };
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 5\n\tP is " + unsignedByteArrayToString(P));
+				System.out.println("Step 5\n\tP is " + Common.unsignedByteArrayToString(P));
 			}
 
 			// i. Let Q = T || [0]^(-t-b-1) mod 16 || [i]^1 || [NUMradix
@@ -142,14 +142,14 @@ public class FF1Parameters implements FFXParameters {
 			Q = concatenate(Q, bytestring(i, 1));
 			Q = concatenate(Q, bytestring(num(B, radix), b));
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 6.i.\n\tQ is " + unsignedByteArrayToString(Q));
+				System.out.println("Step 6.i.\n\tQ is " + Common.unsignedByteArrayToString(Q));
 			}
 
 			// ii. Let R = PRF(P || Q).
 			byte[] R = ciphers.prf(K, concatenate(P, Q));
 			// byte[] R = concatenate(prf(K, concatenate(P, Q)), P);
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 6.ii.\n\tR is " + unsignedByteArrayToString(R));
+				System.out.println("Step 6.ii.\n\tR is " + Common.unsignedByteArrayToString(R));
 			}
 
 			// iii. Let S be the first d bytes of the following string of
@@ -182,7 +182,7 @@ public class FF1Parameters implements FFXParameters {
 			// Step 7. Let Y = STR m radix (y).
 			int[] Y = str(y, radix, m);
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 7.\n\tY is " + intArrayToString(Y) + "\n");
+				System.out.println("Step 7.\n\tY is " + Common.intArrayToString(Y) + "\n");
 			}
 
 			return Y;

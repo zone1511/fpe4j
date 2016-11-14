@@ -48,6 +48,102 @@ public class CommonTest {
 	}
 
 	/**
+	 * Test method for {@link org.fpe4j.Common#byteArrayToHexString(byte[])}.
+	 */
+	@Test
+	public void testByteArrayToHexString() {
+		// null input
+		try {
+			Common.byteArrayToHexString(null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof NullPointerException);
+		}
+
+		// empty input
+		byte[] X1 = {};
+		assertEquals("", Common.byteArrayToHexString(X1));
+
+		// one element
+		byte[] X2 = { 1 };
+		assertEquals("01", Common.byteArrayToHexString(X2));
+
+		// many elements
+		byte[] X3 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2,
+				3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		assertEquals(
+				"000102030405060708090001020304050607080900010203040506070809000102030405060708090001020304050607080900010203040506070809",
+				Common.byteArrayToHexString(X3));
+
+		// range of values
+		byte[] X4 = { (byte) 0x00, (byte) 0x7F, (byte) 0x80, (byte) 0xFF };
+		assertEquals("007F80FF", Common.byteArrayToHexString(X4));
+	}
+
+	/**
+	 * Test method for {@link org.fpe4j.Common#intArrayToString(int[])}.
+	 */
+	@Test
+	public void testIntArrayToString() {
+		// null input
+		try {
+			Common.intArrayToString(null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof NullPointerException);
+		}
+
+		// empty input
+		int[] X1 = {};
+		assertEquals("", Common.intArrayToString(X1));
+
+		// one element
+		int[] X2 = { 1 };
+		assertEquals("1", Common.intArrayToString(X2));
+
+		// many elements
+		int[] X3 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2,
+				3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		assertEquals(
+				"0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9",
+				Common.intArrayToString(X3));
+	}
+
+	/**
+	 * Test method for
+	 * {@link org.fpe4j.Common#unsignedByteArrayToString(byte[])}.
+	 */
+	@Test
+	public void testUnsignedByteArrayToString() {
+		// null input
+		try {
+			Common.unsignedByteArrayToString(null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof NullPointerException);
+		}
+
+		// empty input
+		byte[] X1 = {};
+		assertEquals("[ ]", Common.unsignedByteArrayToString(X1));
+
+		// one element
+		byte[] X2 = { 1 };
+		assertEquals("[ 1 ]", Common.unsignedByteArrayToString(X2));
+
+		// many elements
+		byte[] X3 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2,
+				3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		assertEquals(
+				"[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]",
+				Common.unsignedByteArrayToString(X3));
+
+		// range of values
+		byte[] X4 = { (byte) 0x00, (byte) 0x7F, (byte) 0x80, (byte) 0xFF };
+		assertEquals("[ 0, 127, 128, 255 ]", Common.unsignedByteArrayToString(X4));
+	}
+
+	/**
 	 * Test method for {@link org.fpe4j.Common#num(int[], int)}.
 	 */
 	@Test
@@ -656,7 +752,7 @@ public class CommonTest {
 		}
 
 		// zero byte value
-		byte[] expected2 = { };
+		byte[] expected2 = {};
 		assertArrayEquals(expected2, Common.bytestring(0, 0));
 
 		// one byte value
@@ -868,180 +964,5 @@ public class CommonTest {
 		byte[] Y3 = { 4, 5, 6 };
 		byte[] Z3 = { 4, 5, 6 };
 		assertArrayEquals(Z3, Common.concatenate(X3, Y3));
-	}
-
-	/**
-	 * Test method for {@link org.fpe4j.Common#intArrayToString(int[])}.
-	 */
-	@Test
-	public void testIntArrayToString() {
-		// null input
-		try {
-			Common.intArrayToString(null);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof NullPointerException);
-		}
-
-		// empty input
-		int[] X1 = {};
-		assertEquals("", Common.intArrayToString(X1));
-
-		// one element
-		int[] X2 = { 1 };
-		assertEquals("1", Common.intArrayToString(X2));
-
-		// many elements
-		int[] X3 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2,
-				3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-		assertEquals(
-				"0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9",
-				Common.intArrayToString(X3));
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.fpe4j.Common#unsignedByteArrayToString(byte[])}.
-	 */
-	@Test
-	public void testUnsignedByteArrayToString() {
-		// null input
-		try {
-			Common.unsignedByteArrayToString(null);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof NullPointerException);
-		}
-
-		// empty input
-		byte[] X1 = {};
-		assertEquals("[ ]", Common.unsignedByteArrayToString(X1));
-
-		// one element
-		byte[] X2 = { 1 };
-		assertEquals("[ 1 ]", Common.unsignedByteArrayToString(X2));
-
-		// many elements
-		byte[] X3 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2,
-				3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-		assertEquals(
-				"[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]",
-				Common.unsignedByteArrayToString(X3));
-
-		// range of values
-		byte[] X4 = { (byte) 0x00, (byte) 0x7F, (byte) 0x80, (byte) 0xFF };
-		assertEquals("[ 0, 127, 128, 255 ]", Common.unsignedByteArrayToString(X4));
-	}
-
-	/**
-	 * Test method for {@link org.fpe4j.Common#byteArrayToHexString(byte[])}.
-	 */
-	@Test
-	public void testByteArrayToHexString() {
-		// null input
-		try {
-			Common.byteArrayToHexString(null);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof NullPointerException);
-		}
-
-		// empty input
-		byte[] X1 = {};
-		assertEquals("", Common.byteArrayToHexString(X1));
-
-		// one element
-		byte[] X2 = { 1 };
-		assertEquals("01", Common.byteArrayToHexString(X2));
-
-		// many elements
-		byte[] X3 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2,
-				3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-		assertEquals(
-				"000102030405060708090001020304050607080900010203040506070809000102030405060708090001020304050607080900010203040506070809",
-				Common.byteArrayToHexString(X3));
-
-		// range of values
-		byte[] X4 = { (byte) 0x00, (byte) 0x7F, (byte) 0x80, (byte) 0xFF };
-		assertEquals("007F80FF", Common.byteArrayToHexString(X4));
-	}
-
-	/**
-	 * Test method for {@link org.fpe4j.Common#hexStringToByteArray(String)}.
-	 */
-	@Test
-	public void testHexStringToByteArray() {
-		// null input
-		try {
-			Common.hexStringToByteArray(null);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof NullPointerException);
-		}
-
-		// empty input
-		byte[] expected1 = {};
-		assertArrayEquals(expected1, Common.hexStringToByteArray(""));
-
-		// odd length
-		try {
-			Common.hexStringToByteArray("AAB");
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalArgumentException);
-		}
-
-		// invalid character
-		try {
-			Common.hexStringToByteArray("ABCDEFGH");
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalArgumentException);
-		}
-
-		// range of values
-		for (int i = 0; i < 16; i++) {
-			byte[] b = { (byte) (i * 16), (byte) (i * 16 + 1), (byte) (i * 16 + 2), (byte) (i * 16 + 3),
-					(byte) (i * 16 + 4), (byte) (i * 16 + 5), (byte) (i * 16 + 6), (byte) (i * 16 + 7),
-					(byte) (i * 16 + 8), (byte) (i * 16 + 9), (byte) (i * 16 + 10), (byte) (i * 16 + 11),
-					(byte) (i * 16 + 12), (byte) (i * 16 + 13), (byte) (i * 16 + 14), (byte) (i * 16 + 15) };
-			String s = Common.byteArrayToHexString(b);
-			assertArrayEquals(b, Common.hexStringToByteArray(s));
-		}
-	}
-
-	/**
-	 * Test method for {@link org.fpe4j.Common#intStringToIntArray(String)}
-	 */
-	@Test
-	public void testIntStringToIntArray() {
-		// null input
-		try {
-			Common.intStringToIntArray(null);
-			fail();
-		} catch (Exception e) {
-			assertTrue(e instanceof NullPointerException);
-		}
-
-		// empty input
-		int[] expected1 = {};
-		assertArrayEquals(expected1, Common.intStringToIntArray(""));
-
-		// leading non-numeric characters
-		int[] expected2 = { 10, 11 };
-		assertArrayEquals(expected2, Common.intStringToIntArray(" 10 11"));
-
-		// trailing non-numeric characters
-		int[] expected3 = { 12, 13 };
-		assertArrayEquals(expected3, Common.intStringToIntArray("12 13 "));
-
-		// no numeric characters
-		int[] expected4 = {};
-		assertArrayEquals(expected4, Common.intStringToIntArray("asdfjkl;"));
-
-		// range of values
-		int[] expected5 = { 0, 1, Integer.MAX_VALUE, Integer.MIN_VALUE, -1 };
-		assertArrayEquals(expected5, Common.intStringToIntArray("0, 1, 2147483647, -2147483648, -1"));
-
 	}
 }

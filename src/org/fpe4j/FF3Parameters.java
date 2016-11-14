@@ -44,22 +44,22 @@ public class FF3Parameters implements FFXParameters {
 	/**
 	 * The radix specified in this parameter set.
 	 */
-	private final int radix;
+	final int radix;
 
 	/**
 	 * The minimum input length allowed by this parameter set.
 	 */
-	private final int minlen;
+	final int minlen;
 
 	/**
 	 * The maximum input length allowed by this parameter set.
 	 */
-	private final int maxlen;
+	final int maxlen;
 
 	/**
 	 * Instances of AES ciphers for PRF and CIPH algorithms.
 	 */
-	private final Ciphers ciphers;
+	final Ciphers ciphers;
 
 	/**
 	 * Arithmetic functions for the operations C = A [+] F K (n, T, i, B) in the
@@ -82,7 +82,7 @@ public class FF3Parameters implements FFXParameters {
 	 * then the sequence of elements in the resulting array is reversed before
 	 * it is returned.
 	 */
-	private final FFX.ArithmeticFunction ff3ArithmeticFunction = new FFX.ArithmeticFunction() {
+	final FFX.ArithmeticFunction ff3ArithmeticFunction = new FFX.ArithmeticFunction() {
 
 		@Override
 		public int[] subtract(int[] X, int[] Y) {
@@ -122,7 +122,7 @@ public class FF3Parameters implements FFXParameters {
 	/**
 	 * Split function for FF3.
 	 */
-	private final FFX.SplitFunction ff3Splitter = new FFX.SplitFunction() {
+	final FFX.SplitFunction ff3Splitter = new FFX.SplitFunction() {
 
 		@Override
 		public int split(int n) {
@@ -137,7 +137,7 @@ public class FF3Parameters implements FFXParameters {
 	/**
 	 * Function to determine the number of Feistel rounds for FF3.
 	 */
-	private final FFX.RoundCounter ff3RoundCounter = new FFX.RoundCounter() {
+	final FFX.RoundCounter ff3RoundCounter = new FFX.RoundCounter() {
 
 		@Override
 		public int rnds(int n) {
@@ -148,7 +148,7 @@ public class FF3Parameters implements FFXParameters {
 	/**
 	 * Round function F for FF1, derived from NIST SP 800-38G.
 	 */
-	private final FFX.RoundFunction ff3Round = new FFX.RoundFunction() {
+	final FFX.RoundFunction ff3Round = new FFX.RoundFunction() {
 
 		@Override
 		public boolean validKey(SecretKey K) {
@@ -186,7 +186,7 @@ public class FF3Parameters implements FFXParameters {
 
 			// 2. Let A = X[1..u]; B = X[u + 1..n].
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 2\n\tB is " + intArrayToString(B));
+				System.out.println("Step 2\n\tB is " + Common.intArrayToString(B));
 			}
 
 			// 3. Let T_L = T[0..31] and T_R = T[32..63]
@@ -208,7 +208,7 @@ public class FF3Parameters implements FFXParameters {
 			// ii. Let P = W xor [i] 4 || [NUMradix (REV(B))] 12 .
 			byte[] P = concatenate(xor(W, bytestring(i, 4)), bytestring(num(rev(B), radix), 12));
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 4.ii\n\tP is " + unsignedByteArrayToString(P));
+				System.out.println("Step 4.ii\n\tP is " + Common.unsignedByteArrayToString(P));
 			}
 
 			// iii Let S = REVB(CIPH REVB(K) REVB(P)).
@@ -229,7 +229,7 @@ public class FF3Parameters implements FFXParameters {
 			// 5. Let Y = STR m radix (y).
 			int[] Y = str(y, radix, m);
 			if (Constants.CONFORMANCE_OUTPUT) {
-				System.out.println("Step 5.\n\tY is " + intArrayToString(Y) + "\n");
+				System.out.println("Step 5.\n\tY is " + Common.intArrayToString(Y) + "\n");
 			}
 
 			return Y;

@@ -35,7 +35,7 @@ import javax.crypto.spec.IvParameterSpec;
  * @author Kai Johnson
  *
  */
-public class Ciphers {
+class Ciphers {
 
 	/**
 	 * Instance of the AES cipher in ECB mode with no padding.
@@ -50,7 +50,7 @@ public class Ciphers {
 	/**
 	 * Constructs a Ciphers instance with the required AES ciphers.
 	 */
-	protected Ciphers() {
+	public Ciphers() {
 		try {
 			mAesEcbCipher = Cipher.getInstance("AES/ECB/NoPadding");
 			mAesCbcCipher = Cipher.getInstance("AES/CBC/NoPadding");
@@ -84,7 +84,7 @@ public class Ciphers {
 	 * @throws InvalidKeyException
 	 *             If the key is not a valid AES key.
 	 */
-	protected byte[] prf(SecretKey K, byte[] X) throws InvalidKeyException {
+	public byte[] prf(SecretKey K, byte[] X) throws InvalidKeyException {
 		// validate K
 		if (K == null)
 			throw new NullPointerException("K must not be null");
@@ -146,7 +146,7 @@ public class Ciphers {
 	 * @throws InvalidKeyException
 	 *             If the key is not a valid AES key.
 	 */
-	protected byte[] prf2(SecretKey K, byte[] X) throws InvalidKeyException {
+	public byte[] prf2(SecretKey K, byte[] X) throws InvalidKeyException {
 		// validate K
 		if (K == null)
 			throw new NullPointerException("K must not be null");
@@ -200,7 +200,7 @@ public class Ciphers {
 	 * @throws InvalidKeyException
 	 *             If the key is not a valid AES key.
 	 */
-	protected byte[] ciph(SecretKey K, byte[] X) throws InvalidKeyException {
+	public byte[] ciph(SecretKey K, byte[] X) throws InvalidKeyException {
 		// validate K
 		if (K == null)
 			throw new NullPointerException("K must not be null");

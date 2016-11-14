@@ -38,102 +38,103 @@ import org.fpe4j.FFX.FeistelMethod;
 import org.fpe4j.FFX.RoundCounter;
 import org.fpe4j.FFX.RoundFunction;
 import org.fpe4j.FFX.SplitFunction;
+import org.fpe4j.utilities.Utilities;
 import org.junit.Test;
 
 /**
- * JUnit test cases for the A10Parameters class.
+ * JUnit test cases for the A2Parameters class.
  * 
  * @author Kai Johnson
  *
  */
-public class A10Test {
+public class A2Test {
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#A10Parameters()}
+	 * Test method for {@link org.fpe4j.A2Parameters#A2Parameters()}
 	 */
 	@Test
-	public void testA10Parameters() {
-		A10Parameters result = new A10Parameters();
+	public void testA2Parameters() {
+		A2Parameters result = new A2Parameters();
 		assertNotNull(result);
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getRadix()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getRadix()}
 	 */
 	@Test
 	public void testGetRadix() {
-		A10Parameters a10Parameters = new A10Parameters();
-		assertEquals(10, a10Parameters.getRadix());
+		A2Parameters a2Parameters = new A2Parameters();
+		assertEquals(2, a2Parameters.getRadix());
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getMinLen()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getMinLen()}
 	 */
 	@Test
 	public void testGetMinLen() {
-		A10Parameters a10Parameters = new A10Parameters();
-		assertEquals(4, a10Parameters.getMinLen());
+		A2Parameters a2Parameters = new A2Parameters();
+		assertEquals(8, a2Parameters.getMinLen());
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getMaxLen()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getMaxLen()}
 	 */
 	@Test
 	public void testGetMaxLen() {
-		A10Parameters a10Parameters = new A10Parameters();
-		assertEquals(36, a10Parameters.getMaxLen());
+		A2Parameters a2Parameters = new A2Parameters();
+		assertEquals(128, a2Parameters.getMaxLen());
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getMinTLen()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getMinTLen()}
 	 */
 	@Test
 	public void testGetMinTLen() {
-		A10Parameters a10Parameters = new A10Parameters();
-		assertEquals(0, a10Parameters.getMinTLen());
+		A2Parameters a2Parameters = new A2Parameters();
+		assertEquals(0, a2Parameters.getMinTLen());
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getMaxTLen()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getMaxTLen()}
 	 */
 	@Test
 	public void testGetMaxTLen() {
-		A10Parameters a10Parameters = new A10Parameters();
-		assertEquals(Integer.MAX_VALUE, a10Parameters.getMaxTLen());
+		A2Parameters a2Parameters = new A2Parameters();
+		assertEquals(Integer.MAX_VALUE, a2Parameters.getMaxTLen());
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getArithmeticFunction()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getArithmeticFunction()}
 	 */
 	@Test
 	public void testGetArithmeticFunction() {
-		A10Parameters a10Parameters = new A10Parameters();
-		ArithmeticFunction arithmeticFunction = a10Parameters.getArithmeticFunction();
+		A2Parameters a2Parameters = new A2Parameters();
+		ArithmeticFunction arithmeticFunction = a2Parameters.getArithmeticFunction();
 
-		int[] a = { 0, 1, 2, 3 };
-		int[] b = { 6, 7, 8, 9 };
-		int[] ab = { 6, 9, 1, 2 };
+		int[] a = { 0, 1 };
+		int[] b = { 1, 1 };
+		int[] ab = { 1, 0 };
 
 		assertArrayEquals(ab, arithmeticFunction.add(a, b));
-		assertArrayEquals(b, arithmeticFunction.subtract(ab, a));
+		assertArrayEquals(ab, arithmeticFunction.subtract(a, b));
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getFeistelMethod()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getFeistelMethod()}
 	 */
 	@Test
 	public void testGetFeistelMethod() {
-		A10Parameters a10Parameters = new A10Parameters();
-		assertEquals(FeistelMethod.TWO, a10Parameters.getFeistelMethod());
+		A2Parameters a2Parameters = new A2Parameters();
+		assertEquals(FeistelMethod.TWO, a2Parameters.getFeistelMethod());
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getSplitter()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getSplitter()}
 	 */
 	@Test
 	public void testGetSplitter() {
-		A10Parameters a10Parameters = new A10Parameters();
-		SplitFunction splitter = a10Parameters.getSplitter();
+		A2Parameters a2Parameters = new A2Parameters();
+		SplitFunction splitter = a2Parameters.getSplitter();
 
 		assertEquals(4, splitter.split(8));
 		assertEquals(4, splitter.split(9));
@@ -142,27 +143,31 @@ public class A10Test {
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getRoundCounter()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getRoundCounter()}
 	 */
 	@Test
 	public void testGetRoundCounter() {
-		A10Parameters a10Parameters = new A10Parameters();
-		RoundCounter roundCounter = a10Parameters.getRoundCounter();
+		A2Parameters a2Parameters = new A2Parameters();
+		RoundCounter roundCounter = a2Parameters.getRoundCounter();
 
 		try {
-			roundCounter.rnds(37);
+			roundCounter.rnds(129);
 			fail();
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
-		assertEquals(12, roundCounter.rnds(36));
-		assertEquals(12, roundCounter.rnds(10));
-		assertEquals(18, roundCounter.rnds(9));
-		assertEquals(18, roundCounter.rnds(6));
-		assertEquals(24, roundCounter.rnds(5));
-		assertEquals(24, roundCounter.rnds(4));
+		assertEquals(12, roundCounter.rnds(128));
+		assertEquals(12, roundCounter.rnds(32));
+		assertEquals(18, roundCounter.rnds(31));
+		assertEquals(18, roundCounter.rnds(20));
+		assertEquals(24, roundCounter.rnds(19));
+		assertEquals(24, roundCounter.rnds(14));
+		assertEquals(30, roundCounter.rnds(13));
+		assertEquals(30, roundCounter.rnds(10));
+		assertEquals(36, roundCounter.rnds(9));
+		assertEquals(36, roundCounter.rnds(8));
 		try {
-			roundCounter.rnds(3);
+			roundCounter.rnds(7);
 			fail();
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
@@ -170,15 +175,15 @@ public class A10Test {
 	}
 
 	/**
-	 * Test method for {@link org.fpe4j.A10Parameters#getRoundFunction()}
+	 * Test method for {@link org.fpe4j.A2Parameters#getRoundFunction()}
 	 */
 	@Test
 	public void testGetRoundFunction() {
-		A10Parameters a10Parameters = new A10Parameters();
-		RoundFunction roundFunction = a10Parameters.getRoundFunction();
+		A2Parameters a2Parameters = new A2Parameters();
+		RoundFunction roundFunction = a2Parameters.getRoundFunction();
 
 		// create an AES key from the key data
-		SecretKeySpec K1 = new SecretKeySpec(Common.hexStringToByteArray("2B7E151628AED2A6ABF7158809CF4F3C"), "AES");
+		SecretKeySpec K1 = new SecretKeySpec(Utilities.hexStringToByteArray("2B7E151628AED2A6ABF7158809CF4F3C"), "AES");
 		assertTrue(roundFunction.validKey(K1));
 
 		// null key
@@ -203,11 +208,11 @@ public class A10Test {
 	/**
 	 * Stress test for {@link org.fpe4j.FFX#encrypt(SecretKey, byte[], int[])}
 	 * and {@link org.fpe4j.FFX#decrypt(SecretKey, byte[], int[])} methods using
-	 * A10Parameters.
+	 * A2Parameters.
 	 * <p>
-	 * This test exercises A10 encryption and decryption with inputs of length
-	 * 8, 9, 10, 13, 14, 19, 20, 31, 32, and 128 symbols with each of the
-	 * permitted key sizes.
+	 * This test exercises A2 encryption and decryption with inputs of length 8,
+	 * 9, 10, 13, 14, 19, 20, 31, 32, and 128 symbols with each of the permitted
+	 * key sizes.
 	 * 
 	 * @throws InvalidKeyException
 	 *             Only if there's a programming error in the test case.
@@ -215,10 +220,10 @@ public class A10Test {
 	@Test
 	public void testStress() throws InvalidKeyException {
 		int[] keySizes = { 128, 192, 256 };
-		int[] textSizes = { 4, 5, 9, 10, 36 };
+		int[] textSizes = { 8, 9, 10, 13, 14, 19, 20, 31, 32, 128 };
 
-		// create an A10 instance of FFX
-		A10Parameters params = new A10Parameters();
+		// create an A2 instance of FFX
+		A2Parameters params = new A2Parameters();
 		FFX ffx = new FFX(params);
 		assertNotNull(ffx);
 

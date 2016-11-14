@@ -64,6 +64,9 @@ public class FFXTest {
 		RoundCounter roundCounter;
 		RoundFunction roundFunction;
 
+		public FFXTestParameters() {
+		}
+
 		@Override
 		public int getRadix() {
 			return radix;
@@ -118,7 +121,7 @@ public class FFXTest {
 	/**
 	 * Split function for FFX tests.
 	 */
-	private FFX.SplitFunction splitFunction1 = new FFX.SplitFunction() {
+	private final FFX.SplitFunction splitFunction1 = new FFX.SplitFunction() {
 
 		@Override
 		public int split(int n) {
@@ -129,7 +132,7 @@ public class FFXTest {
 	/**
 	 * Round counter function that returns a sufficient number of rounds.
 	 */
-	private FFX.RoundCounter roundCounter1 = new FFX.RoundCounter() {
+	private final FFX.RoundCounter roundCounter1 = new FFX.RoundCounter() {
 
 		@Override
 		public int rnds(int n) {
@@ -140,7 +143,7 @@ public class FFXTest {
 	/**
 	 * Round counter function that returns an insufficient number of rounds.
 	 */
-	private FFX.RoundCounter roundCounter2 = new FFX.RoundCounter() {
+	private final FFX.RoundCounter roundCounter2 = new FFX.RoundCounter() {
 
 		@Override
 		public int rnds(int n) {
@@ -151,7 +154,7 @@ public class FFXTest {
 	/**
 	 * Simple unciphered round function for FFX tests.
 	 */
-	private FFX.RoundFunction roundFunction1 = new FFX.RoundFunction() {
+	private final FFX.RoundFunction roundFunction1 = new FFX.RoundFunction() {
 
 		@Override
 		public boolean validKey(SecretKey K) {

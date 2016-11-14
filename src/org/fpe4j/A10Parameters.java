@@ -54,17 +54,17 @@ public class A10Parameters implements FFXParameters {
 	/**
 	 * Instance of the AES cipher in CBC mode with no padding.
 	 */
-	private Cipher mAesCbcCipher;
+	Cipher mAesCbcCipher;
 
 	/**
 	 * Zero initialization vector for AEC CBC
 	 */
-	private IvParameterSpec mAesCbcIv;
+	IvParameterSpec mAesCbcIv;
 
 	/**
 	 * Split function for A10
 	 */
-	private final FFX.SplitFunction a10Splitter = new FFX.SplitFunction() {
+	final FFX.SplitFunction a10Splitter = new FFX.SplitFunction() {
 
 		@Override
 		public int split(int n) {
@@ -75,7 +75,7 @@ public class A10Parameters implements FFXParameters {
 	/**
 	 * Function to determine the number of Feistel rounds for A10
 	 */
-	private final FFX.RoundCounter a10RoundCounter = new FFX.RoundCounter() {
+	final FFX.RoundCounter a10RoundCounter = new FFX.RoundCounter() {
 
 		@Override
 		public int rnds(int n) {
@@ -93,7 +93,7 @@ public class A10Parameters implements FFXParameters {
 	/**
 	 * Round function F for A10
 	 */
-	private final FFX.RoundFunction a10Round = new FFX.RoundFunction() {
+	final FFX.RoundFunction a10Round = new FFX.RoundFunction() {
 
 		@Override
 		public int[] F(SecretKey K, int n, byte[] T, int i, int[] B) throws InvalidKeyException {
