@@ -179,6 +179,18 @@ public class IFXTest {
 			assertTrue(e instanceof IllegalArgumentException);
 		}
 
+		// elements equal to radix
+		/*
+		 * Test case for the bug discovered by Michiel van Grinsven
+		 */
+		try {
+			int[] X = { 10, 26, 26, 26, 10, 10, 10 };
+			ifx.num(X);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+		}
+
 		// zero
 		int[] X1 = { 0, 0, 0, 0, 0, 0, 0 };
 		BigInteger x1 = ifx.num(X1);

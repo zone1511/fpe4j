@@ -248,8 +248,8 @@ public class IFX {
 			// P<-ciph(K,I,O)
 			P = mAesCbcCipher.doFinal(O);
 
-		} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
-			throw new RuntimeException(e);
+		} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException exception) {
+			throw new RuntimeException(exception);
 		}
 		// P<-P[length(P)-16..length(P)-1]
 		P = Arrays.copyOfRange(P, P.length - 16, P.length);
@@ -257,8 +257,9 @@ public class IFX {
 
 		// For i in r-1..0
 		for (int i = r - 1; i >= 0; i--) {
-			// If i is even, d<-u ; else d<-v
+			// If i is even, d<-u, e<-length(V) ; else d<-v, e<-length(U)
 			BigInteger d = i % 2 == 0 ? mu : mv;
+			int e = i % 2 == 0 ? V.length : U.length;
 
 			// c<-b
 			BigInteger c = b;
@@ -272,12 +273,16 @@ public class IFX {
 			// B<-bytes(b)
 			byte[] B = Functions.bytes(b);
 
-			// Q<-I || padding(-length(I)-length(B) mod 16) || B
-			int q = I.length + Functions.mod(-I.length - B.length, 16) + B.length;
+			// j<-e - length(B)
+			int j = e - B.length;
+
+			// Q<-I || padding(-length(I)-e mod 16) || padding(j) || B
+			int q = I.length + Functions.mod(-I.length - e, 16) + j + B.length;
 			byte[] Q = new byte[q];
 			System.arraycopy(I, 0, Q, 0, I.length);
 			System.arraycopy(Functions.padding(Functions.mod(-I.length - B.length, 16)), 0, Q, I.length,
 					Functions.mod(-I.length - B.length, 16));
+			System.arraycopy(Functions.padding(j), 0, Q, Q.length - e, j);
 			System.arraycopy(B, 0, Q, Q.length - B.length, B.length);
 
 			// F<-ciph(K,P,Q)
@@ -285,8 +290,8 @@ public class IFX {
 			try {
 				mAesCbcCipher.init(Cipher.ENCRYPT_MODE, K, p);
 				F = mAesCbcCipher.doFinal(Q);
-			} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
-				throw new RuntimeException(e);
+			} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException exception) {
+				throw new RuntimeException(exception);
 			}
 
 			// f<-num(F)
@@ -406,8 +411,8 @@ public class IFX {
 			// P<-ciph(K,I,O)
 			P = mAesCbcCipher.doFinal(O);
 
-		} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
-			throw new RuntimeException(e);
+		} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException exception) {
+			throw new RuntimeException(exception);
 		}
 
 		// P<-P[length(P)-16..length(P)-1]
@@ -416,8 +421,9 @@ public class IFX {
 
 		// For i in 0..r-1
 		for (int i = 0; i < r; i++) {
-			// If i is even, d<-u ; else d<-v
+			// If i is even, d<-u, e<-length(V) ; else d<-v, e<-length(U)
 			BigInteger d = i % 2 == 0 ? mu : mv;
+			int e = i % 2 == 0 ? V.length : U.length;
 
 			// I<-bytes(i)
 			byte[] I = Functions.bytes(i);
@@ -425,12 +431,16 @@ public class IFX {
 			// B<-bytes(b)
 			byte[] B = Functions.bytes(b);
 
+			// j<-e - length(B)
+			int j = e - B.length;
+
 			// Q<-I || padding(-length(I)-length(B) mod 16) || B
-			int q = I.length + Functions.mod(-I.length - B.length, 16) + B.length;
+			int q = I.length + Functions.mod(-I.length - e, 16) + j + B.length;
 			byte[] Q = new byte[q];
 			System.arraycopy(I, 0, Q, 0, I.length);
 			System.arraycopy(Functions.padding(Functions.mod(-I.length - B.length, 16)), 0, Q, I.length,
 					Functions.mod(-I.length - B.length, 16));
+			System.arraycopy(Functions.padding(j), 0, Q, Q.length - e, j);
 			System.arraycopy(B, 0, Q, Q.length - B.length, B.length);
 
 			// F<-ciph(K,P,Q)
@@ -438,8 +448,8 @@ public class IFX {
 			try {
 				mAesCbcCipher.init(Cipher.ENCRYPT_MODE, K, p);
 				F = mAesCbcCipher.doFinal(Q);
-			} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
-				throw new RuntimeException(e);
+			} catch (InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException exception) {
+				throw new RuntimeException(exception);
 			}
 
 			// f<-num(F)
@@ -520,9 +530,13 @@ public class IFX {
 
 		// For each i in 0..length(X)-1
 		for (int i = 0; i < X.length; i++) {
-			// validate X[i]
-			if (X[i] < 0 || X[i] > mW[i])
-				throw new IllegalArgumentException("X[" + i + "] must be in the range 0.." + mW[i] + ": " + X[i]);
+			// validate 0 <= X[i] < W[i]
+			/*
+			 * a bug in this validation was identified with input from Michiel
+			 * van Grinsven
+			 */
+			if (X[i] < 0 || X[i] >= mW[i])
+				throw new IllegalArgumentException("X[" + i + "] must be in the range 0.." + (mW[i] - 1) + ": " + X[i]);
 
 			// y<-y × W[i] + X[i]
 			y = y.multiply(BigInteger.valueOf(mW[i])).add(BigInteger.valueOf(X[i]));

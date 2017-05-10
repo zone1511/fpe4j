@@ -395,7 +395,7 @@ public class FunctionsTest {
 	 * 
 	 */
 	@Test
-	public void TestIntegerDescendingComparator() {
+	public void testIntegerDescendingComparator() {
 		Integer[] X = { Integer.valueOf(0), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(5),
 				Integer.valueOf(8), Integer.valueOf(4), Integer.valueOf(9), Integer.valueOf(2), Integer.valueOf(3),
 				Integer.valueOf(1) };

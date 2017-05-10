@@ -151,7 +151,7 @@ public class FF3 {
 		// value of REVB(K) for readability
 		SecretKeySpec revK = new SecretKeySpec(revb(K.getEncoded()), "AES");
 
-		// 1. Let u = ceiling(n/2); v = n – u.
+		// 1. Let u = ceiling(n/2); v = n - u.
 		int u = ceiling(n / 2.0);
 		int v = n - u;
 		if (Constants.CONFORMANCE_OUTPUT) {
@@ -206,7 +206,7 @@ public class FF3 {
 				System.out.println("\tStep 4.iv\n\t\ty is " + y);
 			}
 
-			// v. Let c = (NUMradix (REV(B))–y) mod radix m .
+			// v. Let c = (NUMradix (REV(B))-y) mod radix m .
 			BigInteger c = mod(num(rev(B), radix).subtract(y), BigInteger.valueOf(radix).pow(m));
 			if (Constants.CONFORMANCE_OUTPUT) {
 				System.out.println("\tStep 4.v\n\t\tc is " + c);
@@ -311,7 +311,7 @@ public class FF3 {
 		 * Note that this only works if K is in RAW format.
 		 */
 
-		// 1. Let u = ceiling(n/2); v = n – u.
+		// 1. Let u = ceiling(n/2); v = n - u.
 		int u = ceiling(n / 2.0);
 		int v = n - u;
 		if (Constants.CONFORMANCE_OUTPUT) {

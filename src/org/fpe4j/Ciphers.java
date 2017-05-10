@@ -102,13 +102,13 @@ class Ciphers {
 		// i.e. BYTELEN(X)/16
 		int m = X.length / 16;
 
-		// 2. Let X[1], …, X[m] be the blocks for which X = X[1] || … || X[m].
+		// 2. Let X[1], ..., X[m] be the blocks for which X = X[1] || ... || X[m].
 		// we extract the blocks inside the for loop
 
 		// 3. Let Y(0) = bitstring(0,128), and
 		byte[] Y = Common.bitstring(false, 128);
 
-		// for j from 1 to m let Y(j) = CIPH(K,Y(j–1) xor X[j]).
+		// for j from 1 to m let Y(j) = CIPH(K,Y(j-1) xor X[j]).
 		for (int j = 0; j < m; j++) {
 			byte[] Xj = Arrays.copyOfRange(X, j * 16, j * 16 + 16);
 			try {
